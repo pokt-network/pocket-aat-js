@@ -1,0 +1,38 @@
+{
+  "name": "aat-sdk",
+  "version": "1.0.0",
+  "description": "Application Authentication Token SDK",
+  "main": "lib/aat.js",
+  "types": "lib/aat.d.ts",
+  "scripts": {
+    "test": "mocha --reporter spec",
+    "build": "tsc",
+    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
+    "lint": "tslint -p tsconfig.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pokt-network/aat-sdk.git"
+  },
+  "keywords": [],
+  "author": "Wilson Garcia",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pokt-network/aat-sdk/issues"
+  },
+  "homepage": "https://github.com/pokt-network/aat-sdk#readme",
+  "files": [
+    "lib/**/*"
+  ],
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^6.2.2",
+    "prettier": "^1.19.1",
+    "tslint": "^5.20.1",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^3.7.2"
+  },
+  "dependencies": {
+    "@tendermint/amino-js": "^0.6.2"
+  }
+}
