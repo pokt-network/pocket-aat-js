@@ -1,38 +1,39 @@
-import { AATMessage } from './model/AATMessage';
-import { decodeString, encodeString } from '@tendermint/amino-js';
-import rs = require('jsrsasign');
+/**
+ * @description PocketAAT entry point.
+ */
 
-const ecdsa = new rs.KJUR.crypto.Signature({"alg": "SHA256withECDSA"});
+ import { sha3_256 } from 'js-sha3';
+ import rs = require('jsrsasign');
+
+ const ecdsa = new rs.KJUR.crypto.Signature({ alg: 'SHA256withECDSA' });
 
 export class PocketAAT {
   public readonly version: string;
   public readonly signature: string;
-  public readonly message: AATMessage;
+  public readonly clientPublicKey: string;
+  public readonly applicationPublicKey: string;
 
-  constructor(version: string, signature: string, clientPublicKey: string, applicationPublicKey: string) {
+  constructor(version: string, clientPublicKey: string, applicationPublicKey: string) {
     this.version = version;
-    this.signature = signature;
-    this.message = new AATMessage(clientPublicKey, applicationPublicKey);
+    this.signature = "";
+    this.clientPublicKey = clientPublicKey;
+    this.applicationPublicKey = applicationPublicKey;
 
-	if (!this.isValid()) {
+    if (!this.isValid()) {
       throw new TypeError('Your token is not valid');
     }
   }
 
   public isValid(): boolean {
-    return this.version.length !== 0 && this.signature.length !== 0 && this.message.isValid();
+    return this.version.length !== 0 && this.clientPublicKey.length !== 0 && this.applicationPublicKey.length !== 0;
   }
 
-  public encode(): Uint8Array {
-    return encodeString(this.toJson());
-  }
+  public sign(): string {
+    const hash = sha3_256.create();
 
-  public sign(privateKey: string): string {
-	  const key = new rs.KJUR.crypto.ECDSA({"curve": "secp256k1"});
-	  key.setPrivateKeyHex(privateKey)
-
-	  ecdsa.init(key)
-	  return ecdsa.signString(this.toJson())
+	console.log(this.toJson());
+    hash.update(this.toJson());
+    return hash.hex();
   }
 
   private toJson(): string {
