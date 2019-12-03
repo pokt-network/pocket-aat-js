@@ -2,20 +2,18 @@
  * @description PocketAAT entry point.
  */
 
- import { sha3_256 } from 'js-sha3';
- import rs = require('jsrsasign');
-
- const ecdsa = new rs.KJUR.crypto.Signature({ alg: 'SHA256withECDSA' });
+import { sha3_256 } from 'js-sha3';
+import ed25519 = require('ed25519');
 
 export class PocketAAT {
   public readonly version: string;
-  public readonly signature: string;
+  private applicationSignature: string;
   public readonly clientPublicKey: string;
   public readonly applicationPublicKey: string;
 
   constructor(version: string, clientPublicKey: string, applicationPublicKey: string) {
     this.version = version;
-    this.signature = "";
+    this.applicationSignature = '';
     this.clientPublicKey = clientPublicKey;
     this.applicationPublicKey = applicationPublicKey;
 
@@ -24,14 +22,21 @@ export class PocketAAT {
     }
   }
 
-  public isValid(): boolean {
+  public sign(privateKey: string): string {
+    const secretKey = new Buffer(privateKey, 'utf-8');
+    const message = new Buffer(this.encrypt(), 'utf-8');
+
+    var signature = ed25519.Sign(message, secretKey);
+    return signature.toString('base64')
+  }
+
+  private isValid(): boolean {
     return this.version.length !== 0 && this.clientPublicKey.length !== 0 && this.applicationPublicKey.length !== 0;
   }
 
-  public sign(): string {
+  private encrypt(): string {
     const hash = sha3_256.create();
 
-	console.log(this.toJson());
     hash.update(this.toJson());
     return hash.hex();
   }
