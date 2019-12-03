@@ -18,9 +18,8 @@ describe('PocketAAT Class tests', () => {
 
 	it('Signing token', () => {
         var pocketAAT = new PocketAAT("1", "1", "1")
-		var sign = pocketAAT.sign()
+		var sign = pocketAAT.sign("7ded200b3000857f8ab0216dddc5926b155b214e4355ff2b988e6aac193364a2")
 
-		console.log(sign)
 		expect(sign).to.not.be.empty;
     }).timeout(0);
 });
