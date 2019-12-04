@@ -7,9 +7,9 @@ import ed25519 = require('ed25519');
 
 export class PocketAAT {
   public readonly version: string;
-  private applicationSignature: string;
   public readonly clientPublicKey: string;
   public readonly applicationPublicKey: string;
+  private applicationSignature: string;
 
   constructor(version: string, clientPublicKey: string, applicationPublicKey: string) {
     this.version = version;
@@ -22,12 +22,20 @@ export class PocketAAT {
     }
   }
 
-  public sign(privateKey: string): string {
-    const secretKey = new Buffer(privateKey, 'utf-8');
-    const message = new Buffer(this.encrypt(), 'utf-8');
+  public sign(privateKey: string) {
+    const secretKey = new Buffer(privateKey, 'ascii');
+    const message = new Buffer(this.encrypt(), 'ascii');
 
-    var signature = ed25519.Sign(message, secretKey);
-    return signature.toString('base64')
+    const signature = ed25519.Sign(message, secretKey);
+    this.applicationSignature = signature.toString('base64');
+  }
+
+  public get signature(): string {
+    return this.applicationSignature;
+  }
+
+  public toJson(): string {
+    return JSON.stringify(this);
   }
 
   private isValid(): boolean {
@@ -39,9 +47,5 @@ export class PocketAAT {
 
     hash.update(this.toJson());
     return hash.hex();
-  }
-
-  private toJson(): string {
-    return JSON.stringify(this);
   }
 }
