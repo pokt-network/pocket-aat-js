@@ -23,8 +23,8 @@ export class PocketAAT {
   }
 
   public sign(privateKey: string) {
-    const secretKey = new Buffer(privateKey, 'ascii');
-    const message = new Buffer(this.hash(), 'ascii');
+    const secretKey = Buffer.from(privateKey, 'ascii');
+    const message = Buffer.from(this.hash(), 'ascii');
 
     const signature = ed25519.Sign(message, secretKey);
     this.applicationSignature = signature.toString('base64');
