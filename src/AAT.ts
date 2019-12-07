@@ -18,13 +18,13 @@ export class PocketAAT {
     this.applicationPublicKey = applicationPublicKey;
 
     if (!this.isValid()) {
-      throw new TypeError('Your token is not valid');
+      throw new TypeError('Invalid properties length.');
     }
   }
 
   public sign(privateKey: string) {
     const secretKey = new Buffer(privateKey, 'ascii');
-    const message = new Buffer(this.encrypt(), 'ascii');
+    const message = new Buffer(this.hash(), 'ascii');
 
     const signature = ed25519.Sign(message, secretKey);
     this.applicationSignature = signature.toString('base64');
@@ -42,7 +42,7 @@ export class PocketAAT {
     return this.version.length !== 0 && this.clientPublicKey.length !== 0 && this.applicationPublicKey.length !== 0;
   }
 
-  private encrypt(): string {
+  private hash(): string {
     const hash = sha3_256.create();
 
     hash.update(this.toJson());
