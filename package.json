@@ -12,15 +12,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pokt-network/aat-sdk.git"
+    "url": "git+https://github.com/pokt-network/aat-js-sdk.git"
   },
   "keywords": [],
   "author": "Wilson Garcia, Pabel Nunez",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/pokt-network/aat-sdk/issues"
+    "url": "https://github.com/pokt-network/aat-js-sdk/issues"
   },
-  "homepage": "https://github.com/pokt-network/aat-sdk#readme",
+  "homepage": "https://github.com/pokt-network/aat-js-sdk#readme",
   "files": [
     "lib/**/*"
   ],
