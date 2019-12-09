@@ -1,6 +1,6 @@
 {
-  "name": "aat-sdk",
-  "version": "1.0.0",
+  "name": "aat-js-sdk",
+  "version": "0.0.1",
   "description": "Application Authentication Token SDK",
   "main": "lib/aat.js",
   "types": "lib/aat.d.ts",
@@ -15,7 +15,7 @@
     "url": "git+https://github.com/pokt-network/aat-sdk.git"
   },
   "keywords": [],
-  "author": "Wilson Garcia",
+  "author": "Wilson Garcia, Pabel Nunez",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/pokt-network/aat-sdk/issues"
