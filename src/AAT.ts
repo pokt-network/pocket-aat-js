@@ -4,6 +4,7 @@
 
 import { sha3_256 } from 'js-sha3';
 import ed25519 = require('ed25519');
+const default_version = "0.0.1";
 
 export class PocketAAT {
   public readonly version: string;
@@ -11,7 +12,7 @@ export class PocketAAT {
   public readonly applicationPublicKey: string;
   private applicationSignature: string;
 
-  constructor(version: string, clientPublicKey: string, applicationPublicKey: string) {
+  constructor(version: string = default_version, clientPublicKey: string, applicationPublicKey: string) {
     this.version = version;
     this.applicationSignature = '';
     this.clientPublicKey = clientPublicKey;
