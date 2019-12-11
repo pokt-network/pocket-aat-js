@@ -23,11 +23,15 @@ export class PocketAAT {
   }
 
   public sign(privateKey: string) {
-    const secretKey = Buffer.from(privateKey, 'ascii');
-    const message = Buffer.from(this.hash(), 'ascii');
+    if (privateKey.length !== 0) {
+      const secretKey = Buffer.from(privateKey, 'ascii');
+      const message = Buffer.from(this.hash(), 'ascii');
 
-    const signature = ed25519.Sign(message, secretKey);
-    this.applicationSignature = signature.toString('base64');
+      const signature = ed25519.Sign(message, secretKey);
+      this.applicationSignature = signature.toString('base64');
+    } else {
+      throw new Error("Private key can't be an empty string");
+    }
   }
 
   public get signature(): string {

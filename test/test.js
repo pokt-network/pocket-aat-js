@@ -29,7 +29,7 @@ describe('PocketAAT Class tests', () => {
 		expect(pocketAAT.isValid()).to.equal(true);
     }).timeout(0);
 
-    it('Creating the hash', () => {
+    it('Should successfully create a hash', () => {
         var pocketAAT = new PocketAAT(version, clientPublicKey, applicationPublicKey);
 
 		var hash = pocketAAT.hash();
@@ -37,10 +37,28 @@ describe('PocketAAT Class tests', () => {
 		expect(hash).to.not.be.empty;
     }).timeout(0);
 
-	it('Signing the token', () => {
+	it('Should sign the token using the applicationPrivateKey', () => {
         var pocketAAT = new PocketAAT(version, clientPublicKey, applicationPublicKey);
-		pocketAAT.sign(applicationPrivateKey);
 
-		expect(pocketAAT.signature).to.not.be.empty;
+        try {
+            pocketAAT.sign(applicationPrivateKey);
+
+            expect(pocketAAT.signature).to.not.be.empty;
+        } catch (error) {
+            expect(error).to.be.empty;
+        }
+
+    }).timeout(0);
+
+    it('Should fail to sign the token using an empty applicationPrivateKey', () => {
+        var pocketAAT = new PocketAAT(version, clientPublicKey, applicationPublicKey);
+
+        try {
+            pocketAAT.sign("");
+
+            expect(pocketAAT).to.not.be.an.instanceof(PocketAAT);
+        } catch (error) {
+            expect(error).to.be.an.instanceof(Error);
+        }
     }).timeout(0);
 });
