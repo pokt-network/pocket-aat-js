@@ -43,11 +43,11 @@ export class PocketAAT {
     return JSON.stringify(this);
   }
 
-  private isValid(): boolean {
+  public isValid(): boolean {
     return this.version.length !== 0 && this.clientPublicKey.length !== 0 && this.applicationPublicKey.length !== 0;
   }
 
-  private hash(): string {
+  public hash(): string {
     const hash = sha3_256.create();
 
     hash.update(this.toJson());
