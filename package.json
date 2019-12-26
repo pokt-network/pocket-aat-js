@@ -5,7 +5,7 @@
   "main": "lib/aat.js",
   "types": "lib/aat.d.ts",
   "scripts": {
-    "test": "mocha -r ts-node/register tests/**/*.spec.ts",
+    "test": "jest",
     "build": "tsc",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
     "lint": "tslint -p tsconfig.json"
@@ -26,14 +26,16 @@
   ],
   "devDependencies": {
     "@types/chai": "^4.2.7",
-    "@types/mocha": "^5.2.7",
+    "@types/jest": "^24.0.25",
     "chai": "^4.2.0",
-    "mocha": "^6.2.2",
+    "jest": "^24.9.0",
     "prettier": "^1.19.1",
+    "ts-jest": "^24.2.0",
     "ts-node": "^8.5.4",
+    "tsconfig-paths": "^3.9.0",
     "tslint": "^5.20.1",
     "tslint-config-prettier": "^1.18.0",
-    "typescript": "^3.7.2"
+    "typescript": "^3.7.4"
   },
   "dependencies": {
     "@types/ed25519": "0.0.0",
