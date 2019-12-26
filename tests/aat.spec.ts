@@ -3,7 +3,6 @@ import { expect } from 'chai';
 import 'mocha';
 
 // For Testing we are using dummy data, none of the following information is real.
-const version = '1.0';
 const clientPublicKey = '0x6F5Ec3BCdf9013a5553d53b7a42CBCce4e1B9901';
 const applicationPublicKey = '0x80Aa10e5d840db15dDFD3e0B46C63EE9a567780B';
 const applicationPrivateKey = 'E73BE2AD96721D350CCFAEBF30CB2A4160652940588987EF56A9DD0FAE8042CB';
