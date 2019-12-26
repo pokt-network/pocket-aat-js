@@ -1,56 +1,76 @@
-/**
- * @description PocketAAT entry point.
- */
-
 import { sha3_256 } from 'js-sha3';
 import ed25519 = require('ed25519');
-const default_version = "0.0.1";
 
+/**
+ * @description PocketAAT implementation 
+ * (version 0.0.1 of the specification: 
+ * https://github.com/pokt-network/pocket-core/blob/staging/doc/application-auth-token.md).
+ */
 export class PocketAAT {
-  public readonly version: string;
+  public readonly version: string = '0.0.1';
   public readonly clientPublicKey: string;
   public readonly applicationPublicKey: string;
-  private applicationSignature: string;
+  public readonly applicationSignature: string;
 
-  constructor(version: string = default_version, clientPublicKey: string, applicationPublicKey: string) {
-    this.version = version;
-    this.applicationSignature = '';
+  /**
+   * @description PocketAAT constructor, automatically creates the 
+   * signature using the privateKey parameter
+   * @param clientPublicKey
+   * @param applicationPublicKey
+   * @param privateKey
+   */
+  constructor(
+    clientPublicKey: string,
+    applicationPublicKey: string,
+    privateKey: string,
+  ) {
     this.clientPublicKey = clientPublicKey;
     this.applicationPublicKey = applicationPublicKey;
+    this.applicationSignature = this.sign(
+      {
+        version: this.version,
+        clientPublicKey: clientPublicKey,
+        applicationPublicKey: applicationPublicKey,
+      },
+      privateKey,
+    );
 
     if (!this.isValid()) {
       throw new TypeError('Invalid properties length.');
     }
   }
 
-  public sign(privateKey: string) {
-    if (privateKey.length !== 0) {
-      const secretKey = Buffer.from(privateKey, 'ascii');
-      const message = Buffer.from(this.hash(), 'ascii');
 
-      const signature = ed25519.Sign(message, secretKey);
-      this.applicationSignature = signature.toString('base64');
+  /**
+   * @description Returns whether or not this is a valid AAT according to the current version.
+   */
+  public isValid(): boolean {
+    return (
+      this.version.length !== 0 &&
+      this.clientPublicKey.length !== 0 &&
+      this.applicationPublicKey.length !== 0 &&
+      this.applicationSignature.length !== 0
+    );
+  }
+
+  /**
+   * @description Given an aatPayload object, create a SHA3 hash of it and signs it using privateKey.
+   * @param aatPayload 
+   * @param privateKey 
+   */
+  private sign(aatPayload: object, privateKey: string) {
+    // Generate sha3 hash of the aat payload object
+    const hash = sha3_256.create();
+    hash.update(JSON.stringify(aatPayload));
+    var bufferPayload = Buffer.from(hash.hex(), 'hex');
+
+    if (privateKey.length !== 0) {
+      // Return signed aat payload hash
+      const privateKeyBuffer = Buffer.from(privateKey, 'hex');
+      const signature = ed25519.Sign(bufferPayload, privateKeyBuffer);
+      return signature.toString('hex');
     } else {
       throw new Error("Private key can't be an empty string");
     }
-  }
-
-  public get signature(): string {
-    return this.applicationSignature;
-  }
-
-  public toJson(): string {
-    return JSON.stringify(this);
-  }
-
-  public isValid(): boolean {
-    return this.version.length !== 0 && this.clientPublicKey.length !== 0 && this.applicationPublicKey.length !== 0;
-  }
-
-  public hash(): string {
-    const hash = sha3_256.create();
-
-    hash.update(this.toJson());
-    return hash.hex();
   }
 }
