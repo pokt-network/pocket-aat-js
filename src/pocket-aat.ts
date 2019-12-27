@@ -28,9 +28,9 @@ export class PocketAAT {
     this.applicationPublicKey = applicationPublicKey;
     this.applicationSignature = this.sign(
       {
-        version: this.version,
-        clientPublicKey: clientPublicKey,
-        applicationPublicKey: applicationPublicKey,
+        applicationPublicKey: this.applicationPublicKey,
+        clientPublicKey: this.clientPublicKey,
+        version: this.version
       },
       privateKey,
     );
@@ -62,7 +62,7 @@ export class PocketAAT {
     // Generate sha3 hash of the aat payload object
     const hash = sha3_256.create();
     hash.update(JSON.stringify(aatPayload));
-    var bufferPayload = Buffer.from(hash.hex(), 'hex');
+    const bufferPayload = Buffer.from(hash.hex(), 'hex');
 
     if (privateKey.length !== 0) {
       // Return signed aat payload hash
