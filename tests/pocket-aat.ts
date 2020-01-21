@@ -92,14 +92,14 @@ describe('PocketAAT Class tests', () => {
         })
 
         it('should fail given an empty applicationPublicKey', () => {
-            var foo = function () {
+            const foo = function () {
                 return PocketAAT.from(version, clientPublicKey, "", applicationPrivateKey)
             }
             expect(foo).to.throw(TypeError)
         })
 
         it('should fail given an empty applicationPrivateKey', () => {
-            var foo = function () {
+            const foo = function () {
                 return PocketAAT.from(version, clientPublicKey, applicationPublicKey, "")
             }
             expect(foo).to.throw(TypeError)
