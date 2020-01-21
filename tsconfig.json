@@ -2,22 +2,14 @@
   "compilerOptions": {
     "target": "es5",
     "module": "commonjs",
-    "declaration": true,
+    "sourceMap": true,
     "outDir": "./lib",
     "strict": true,
-    "baseUrl": "./src",
-    "paths": {
-      "@src/*": [
-        "*"
-      ]
-    }
+    "alwaysStrict": true,
+    "lib": ["es5", "es6", "dom"],
+    "downlevelIteration": true,
+    "resolveJsonModule": true,
+    "declaration": true
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "**/__tests__/*"],
-  "baseUrl": "./src",
-  "paths": {
-    "@src/*": [
-      "*"
-    ]
-  }
+  "exclude": ["node_modules", "**/__tests__/*"]
 }
