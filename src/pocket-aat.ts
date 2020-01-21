@@ -10,16 +10,16 @@ import { Versions } from './utils/enums'
  */
 export class PocketAAT {
   /**
- *
- * Creates a PocketAAT object, automatically creates the 
- * signature using the provided parameters
- * @param {string} version - Version information.
- * @param {string} clientPublicKey - Client Public Key.
- * @param {string} applicationPublicKey - Application Public Key.
- * @param {string} privateKey - Private Key.
- * @returns {PocketAAT} - Pocket Authentication Token object.
- * @memberof PocketAAT
- */
+   *
+   * Creates a PocketAAT object, automatically creates the 
+   * signature using the provided parameters
+   * @param {string} version - Version information.
+   * @param {string} clientPublicKey - Client Public Key.
+   * @param {string} applicationPublicKey - Application Public Key.
+   * @param {string} privateKey - Private Key.
+   * @returns {PocketAAT} - Pocket Authentication Token object.
+   * @memberof PocketAAT
+   */
   public static from(
     version: string,
     clientPublicKey: string,
@@ -38,6 +38,27 @@ export class PocketAAT {
       return new PocketAAT(version, clientPublicKey, applicationPublicKey, applicationSignature)
     } else {
       throw new TypeError('Provided version is not supported.')
+    }
+  }
+
+  /**
+   * @description Given an aatPayload object, create a SHA3 hash of it and signs it using privateKey.
+   * @param aatPayload - Object with the mandatory parameters.
+   * @param privateKey - Private Key
+   */
+  private static sign(aatPayload: object, privateKey: string) {
+    // Generate sha3 hash of the aat payload object
+    const hash = sha3_256.create()
+    hash.update(JSON.stringify(aatPayload))
+    const bufferPayload = Buffer.from(hash.hex(), 'hex')
+
+    if (Helper.byteLength(privateKey) === 64 && Helper.validateHexStr(privateKey)) {
+      // Return signed aat payload hash
+      const privateKeyBuffer = Buffer.from(privateKey, 'hex')
+      const signature = ed25519.Sign(bufferPayload, privateKeyBuffer)
+      return signature.toString('hex')
+    } else {
+      throw new TypeError("Private key can't be an empty string")
     }
   }
 
@@ -83,12 +104,17 @@ export class PocketAAT {
   public isValid(): boolean {
     return (
       this.version.length !== 0 &&
-      Helper.byteLength( this.clientPublicKey) === 32 && Helper.validateHexStr(this.clientPublicKey) &&
+      Helper.byteLength(this.clientPublicKey) === 32 && Helper.validateHexStr(this.clientPublicKey) &&
       Helper.byteLength(this.applicationPublicKey) === 32 && Helper.validateHexStr(this.applicationPublicKey) &&
       Helper.validateHexStr(this.applicationSignature)
     )
   }
-  private verifyAATSignature(payload: object, applicationPublicKey: string, applicationSignature: string){
+  /**
+   * @description Verifies if the application signature belongs to the application public .
+   * @param aatPayload - Object with the mandatory parameters.
+   * @param privateKey - Private Key
+   */
+  private verifyAATSignature(payload: object, applicationPublicKey: string, applicationSignature: string) {
     // Generate sha3 hash of the aat payload object
     const hash = sha3_256.create()
     hash.update(JSON.stringify(payload))
@@ -97,25 +123,5 @@ export class PocketAAT {
     const bufferApplicationPublicKey = Buffer.from(applicationPublicKey, 'hex')
 
     return ed25519.Verify(bufferPayload, bufferApplicationSignature, bufferApplicationPublicKey)
-  }
-  /**
-   * @description Given an aatPayload object, create a SHA3 hash of it and signs it using privateKey.
-   * @param aatPayload - Object with the mandatory parameters.
-   * @param privateKey - Private Key
-   */
-  private static sign(aatPayload: object, privateKey: string) {
-    // Generate sha3 hash of the aat payload object
-    const hash = sha3_256.create()
-    hash.update(JSON.stringify(aatPayload))
-    const bufferPayload = Buffer.from(hash.hex(), 'hex')
-
-    if (Helper.byteLength(privateKey) === 64 && Helper.validateHexStr(privateKey)) {
-      // Return signed aat payload hash
-      const privateKeyBuffer = Buffer.from(privateKey, 'hex')
-      const signature = ed25519.Sign(bufferPayload, privateKeyBuffer)
-      return signature.toString('hex')
-    } else {
-      throw new TypeError("Private key can't be an empty string")
-    }
   }
 }
