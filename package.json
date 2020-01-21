@@ -2,10 +2,10 @@
   "name": "pocket-aat-js",
   "version": "0.0.1",
   "description": "Application Authentication Token Javascript SDK",
-  "main": "lib/aat.js",
-  "types": "lib/aat.d.ts",
+  "main": "lib/src/pocket-aat.js",
+  "types": "lib/src/pocket-aat.d.ts",
   "scripts": {
-    "test": "jest",
+    "test": "mocha --require ts-node/register tests/**/*.ts",
     "build": "tsc",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
     "lint": "tslint -p tsconfig.json"
@@ -26,7 +26,7 @@
   ],
   "devDependencies": {
     "@types/chai": "^4.2.7",
-    "@types/jest": "^24.0.25",
+    "@types/mocha": "^5.2.7",
     "chai": "^4.2.0",
     "jest": "^24.9.0",
     "prettier": "^1.19.1",
