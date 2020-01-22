@@ -6,7 +6,7 @@
   "types": "lib/src/pocket-aat.d.ts",
   "scripts": {
     "test": "mocha --require ts-node/register tests/**/*.ts",
-    "build": "tsc",
+    "build": "npm run lint & tsc",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
     "lint": "tslint -p tsconfig.json"
   },
@@ -27,8 +27,8 @@
   "devDependencies": {
     "@types/chai": "^4.2.7",
     "@types/mocha": "^5.2.7",
+    "mocha": "^6.2.2",
     "chai": "^4.2.0",
-    "jest": "^24.9.0",
     "prettier": "^1.19.1",
     "ts-jest": "^24.2.0",
     "ts-node": "^8.5.4",
