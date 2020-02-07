@@ -10,6 +10,7 @@
       "no-unused-expression": false,
       "only-arrow-functions": false,
       "max-classes-per-file": [true, 2],
-      "object-literal-shorthand": false
+      "object-literal-shorthand": false,
+      "object-literal-sort-keys": false
    }
 }

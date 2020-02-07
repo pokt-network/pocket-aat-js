@@ -29,9 +29,10 @@ export class PocketAAT {
     if (Versions.isSupported(version)) {
       const applicationSignature = this.sign(
         {
-          applicationPublicKey: applicationPublicKey,
-          clientPublicKey: clientPublicKey,
-          version: version
+          version: version,
+          app_address: applicationPublicKey,
+          client_pub_key: clientPublicKey,
+          signature: ""
         },
         privateKey,
       )
@@ -86,9 +87,10 @@ export class PocketAAT {
     this.applicationSignature = applicationSignature
     // Payload to verify signature
     const payload = {
-      applicationPublicKey: applicationPublicKey,
-      clientPublicKey: clientPublicKey,
-      version: version
+      version: version,
+      app_address: applicationPublicKey,
+      client_pub_key: clientPublicKey,
+      signature: ""
     }
     if (!this.isValid()) {
       throw new TypeError('Invalid properties format.')
