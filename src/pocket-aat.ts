@@ -29,12 +29,16 @@ export class PocketAAT {
     if (Versions.isSupported(version)) {
       const applicationSignature = this.sign(
         {
-          applicationPublicKey: applicationPublicKey,
-          clientPublicKey: clientPublicKey,
-          version: version
+          version: version,
+          app_address: applicationPublicKey,
+          client_pub_key: clientPublicKey,
+          signature: ""
         },
         privateKey,
       )
+      if (applicationSignature instanceof Error) {
+        throw applicationSignature
+      }
       return new PocketAAT(version, clientPublicKey, applicationPublicKey, applicationSignature)
     } else {
       throw new TypeError('Provided version is not supported.')
@@ -46,7 +50,7 @@ export class PocketAAT {
    * @param aatPayload - Object with the mandatory parameters.
    * @param privateKey - Private Key
    */
-  private static sign(aatPayload: object, privateKey: string) {
+  private static sign(aatPayload: object, privateKey: string): string | Error {
     // Generate sha3 hash of the aat payload object
     const hash = sha3_256.create()
     hash.update(JSON.stringify(aatPayload))
@@ -56,10 +60,25 @@ export class PocketAAT {
       // Return signed aat payload hash
       const privateKeyBuffer = Buffer.from(privateKey, 'hex')
       const signature = ed25519.Sign(bufferPayload, privateKeyBuffer)
-      return signature.toString('hex')
-    } else {
-      throw new TypeError("Private key can't be an empty string")
+
+      return this.sliceBuffer(signature).toString("hex")
+  } else {
+      throw new TypeError("Private key should be a 64 bytes Hex string")
     }
+  }
+  /**
+   * @description Given a signature Buffer, returns a 32 bytes signature.
+   * @param obj - Signature Buffer.
+   * @returns {Buffer} - 32 bytes Signature Buffer.
+   * @memberof PocketAAT
+   */
+  private static sliceBuffer(obj: Buffer): Buffer | Error {
+    if (obj.byteLength === 64) {
+      return obj.slice(0, obj.byteLength / 2)
+    } else if (obj.byteLength === 32) {
+      return obj
+    }
+    return new Error("Invalid signature, the result should be 64 or 32 bytes length.")
   }
 
   public readonly version: string = Versions["0.0.1"].toString()
@@ -84,17 +103,9 @@ export class PocketAAT {
     this.clientPublicKey = clientPublicKey
     this.applicationPublicKey = applicationPublicKey
     this.applicationSignature = applicationSignature
-    // Payload to verify signature
-    const payload = {
-      applicationPublicKey: applicationPublicKey,
-      clientPublicKey: clientPublicKey,
-      version: version
-    }
+
     if (!this.isValid()) {
       throw new TypeError('Invalid properties format.')
-    }
-    if (!this.verifyAATSignature(payload, applicationPublicKey, applicationSignature)) {
-      throw new TypeError('Invalid AAT Signature.')
     }
   }
 
@@ -108,20 +119,5 @@ export class PocketAAT {
       Helper.byteLength(this.applicationPublicKey) === 32 && Helper.validateHexStr(this.applicationPublicKey) &&
       Helper.validateHexStr(this.applicationSignature)
     )
-  }
-  /**
-   * @description Verifies if the application signature belongs to the application public .
-   * @param aatPayload - Object with the mandatory parameters.
-   * @param privateKey - Private Key
-   */
-  private verifyAATSignature(payload: object, applicationPublicKey: string, applicationSignature: string) {
-    // Generate sha3 hash of the aat payload object
-    const hash = sha3_256.create()
-    hash.update(JSON.stringify(payload))
-    const bufferPayload = Buffer.from(hash.hex(), 'hex')
-    const bufferApplicationSignature = Buffer.from(applicationSignature, 'hex')
-    const bufferApplicationPublicKey = Buffer.from(applicationPublicKey, 'hex')
-
-    return ed25519.Verify(bufferPayload, bufferApplicationSignature, bufferApplicationPublicKey)
   }
 }

@@ -39,10 +39,11 @@ describe('PocketAAT Class tests', () => {
         })
 
         it('should fail given an invalid hex applicationPublicKey', () => {
-            const foo = function () {
-                return PocketAAT.from(version, clientPublicKey, invalidHexApplicationPublicKey, applicationPrivateKey)
+            try {
+                const pocketAAT = PocketAAT.from(version, clientPublicKey, invalidHexApplicationPublicKey, applicationPrivateKey)
+            } catch (error) {
+                expect(error).to.be.an.instanceof(TypeError)
             }
-            expect(foo).to.throw(Error)
         })
 
         it('should fail given an invalid hex applicationPrivateKey', () => {
