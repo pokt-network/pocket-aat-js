@@ -35,7 +35,7 @@ You should have at least have a basic knowledge of blockchain technology and kno
 ### Installation
 
 ```
-npm install --save pocket-aat-js
+npm install --save @pokt-network/aat-js
 ```
 
 ## Documentation
