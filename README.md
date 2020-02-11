@@ -24,8 +24,6 @@ Generate to-spec AAT tokens for your Pocket JavaScript applications easily using
     <a href="https://github.com/pokt-network/pocket-aat-js/issues"><img src="https://img.shields.io/github/issues-closed/pokt-network/pocket-aat-js.svg"/></a>
 </div>
 
-Before you can start using the library, you have to get a Developer ID by [registering for Testnet](https://pocket-network.readme.io/docs/how-to-participate#section-for-developers).
-
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
@@ -44,7 +42,7 @@ npm install --save pocket-aat-js
 
 ```javascript
 // First require the PocketAAT class
-const PocketAAT = require('pocket-aat-js');
+const PocketAAT = require('@pokt-network/aat-js');
 
 // Define the arguments needed to build an AAT
 const clientPublicKey = '0x6F5Ec3BCdf9013a5553d53b7a42CBCce4e1B9901';
@@ -52,7 +50,7 @@ const applicationPublicKey = '0x80Aa10e5d840db15dDFD3e0B46C63EE9a567780B';
 const applicationPrivateKey = 'E73BE2AD96721D350CCFAEBF30CB2A4160652940588987EF56A9DD0FAE8042CB';
 
 // Create a new PocketAAT instance
-var pocketAAT = new PocketAAT(clientPublicKey, applicationPublicKey, applicationPrivateKey);
+var pocketAAT = PocketAAT.from(clientPublicKey, applicationPublicKey, applicationPrivateKey);
 
 // Example JSON output
 console.log(JSON.stringify(pocketAAT));
