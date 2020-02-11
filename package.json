@@ -1,9 +1,12 @@
 {
-  "name": "pocket-aat-js",
-  "version": "0.0.1",
+  "name": "@pokt-network/aat-js",
+  "version": "0.0.1-rc",
   "description": "Application Authentication Token Javascript SDK",
   "main": "lib/src/index.js",
   "types": "lib/src/index.d.ts",
+  "engines": {
+    "node": ">=11.6"
+  },
   "scripts": {
     "test": "mocha --require ts-node/register tests/**/*.ts",
     "build": "rm -r lib & npm run lint & tsc",
