@@ -1,5 +1,5 @@
 import { sha3_256 } from 'js-sha3'
-import ed25519 = require('ed25519')
+import * as ed25519 from "@pokt-network/ed25519"
 import { Helper } from "./utils/helper"
 import { Versions } from './utils/enums'
 
@@ -30,7 +30,7 @@ export class PocketAAT {
       const applicationSignature = this.sign(
         {
           version: version,
-          app_address: applicationPublicKey,
+          app_pub_key: applicationPublicKey,
           client_pub_key: clientPublicKey,
           signature: ""
         },
@@ -88,7 +88,7 @@ export class PocketAAT {
     // Payload to verify signature
     const payload = {
       version: version,
-      app_address: applicationPublicKey,
+      app_pub_key: applicationPublicKey,
       client_pub_key: clientPublicKey,
       signature: ""
     }
