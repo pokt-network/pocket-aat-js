@@ -16,8 +16,8 @@ const invalidApplicationSignature = '7c3706ece9a5248187ca58cf1d65f12d93c7dfc500d
 
 describe('PocketAAT Class tests', () => {
     describe('Valid AAT parameters', () => {
-        it('should create a valid PocketAAT instance', () => {
-            const pocketAAT = PocketAAT.from(version, clientPublicKey, applicationPublicKey, applicationPrivateKey)
+        it('should create a valid PocketAAT instance', async () => {
+            const pocketAAT = await PocketAAT.from(version, clientPublicKey, applicationPublicKey, applicationPrivateKey)
             expect(pocketAAT).to.not.be.an.instanceof(TypeError)
             expect(pocketAAT).to.be.an.instanceof(PocketAAT)
             expect(pocketAAT.isValid()).to.equal(true)
@@ -31,79 +31,86 @@ describe('PocketAAT Class tests', () => {
         })
     })
     describe('Invalid Hex AAT parameters', () => {
-        it('should fail given an invalid hex clientPublicKey', () => {
+        it('should fail given an invalid hex clientPublicKey', async () => {
             try {
-                const pocketAAT = PocketAAT.from(version, invalidHexClientPublicKey, applicationPublicKey, applicationPrivateKey)
+                const pocketAAT = await PocketAAT.from(version, invalidHexClientPublicKey, applicationPublicKey, applicationPrivateKey)
             } catch (error) {
                 expect(error).to.be.an.instanceof(TypeError)
             }
         })
 
-        it('should fail given an invalid hex applicationPublicKey', () => {
-            const foo = function () {
-                return PocketAAT.from(version, clientPublicKey, invalidHexApplicationPublicKey, applicationPrivateKey)
+        it('should fail given an invalid hex applicationPublicKey', async () => {
+            try {
+                const pocketAAT = await PocketAAT.from(version, clientPublicKey, invalidHexApplicationPublicKey, applicationPrivateKey)
+            } catch (error) {
+                expect(error).to.be.an.instanceof(TypeError)
             }
-            expect(foo).to.throw(Error)
+
         })
 
-        it('should fail given an invalid hex applicationPrivateKey', () => {
+        it('should fail given an invalid hex applicationPrivateKey', async () => {
             try {
-                const pocketAAT = PocketAAT.from(version, clientPublicKey, applicationPublicKey, invalidHexApplicationPrivateKey)
+                const pocketAAT = await PocketAAT.from(version, clientPublicKey, applicationPublicKey, invalidHexApplicationPrivateKey)
             } catch (error) {
                 expect(error).to.be.an.instanceof(TypeError)
             }
         })
 
-        it('Should fail given an invalid hex Application Signature', () => {
+        it('Should fail given an invalid hex Application Signature', async () => {
             try {
-                const pocketAAT = new PocketAAT(version, clientPublicKey, applicationPublicKey, invalidHexApplicationSignature)
+                const pocketAAT = await new PocketAAT(version, clientPublicKey, applicationPublicKey, invalidHexApplicationSignature)
             } catch (error) {
                 expect(error).to.be.an.instanceof(Error)
             }
         })
     })
     describe('Unsupported or invalid AAT Scenarios', () => {
-        it('should fail given an unsupported version', () => {
-            const foo = function () {
-                return PocketAAT.from("1.0.2", clientPublicKey, applicationPublicKey, applicationPrivateKey)
-            }
-            expect(foo).to.throw(Error)
-        })
-        it('should fail given an Application Signature that isnt related to the Application Public Key', () => {
+        it('should fail given an unsupported version', async () => {
             try {
-                const pocketAAT = new PocketAAT(version, clientPublicKey, applicationPublicKey, invalidApplicationSignature)
+                const pocketAAT = await PocketAAT.from("1.0.2", clientPublicKey, applicationPublicKey, applicationPrivateKey)
+            } catch (error) {
+                expect(error).to.be.an.instanceof(Error)
+            }
+        })
+        it('should fail given an Application Signature that isnt related to the Application Public Key', async () => {
+            try {
+                const pocketAAT = await new PocketAAT(version, clientPublicKey, applicationPublicKey, invalidApplicationSignature)
             } catch (error) {
                 expect(error).to.be.an.instanceof(Error)
             }
         })
     })
     describe('Wrong AAT parameters', () => {
-        it('should fail given an empty version', () => {
-            const foo = function () {
-                return PocketAAT.from("", clientPublicKey, applicationPublicKey, applicationPrivateKey)
+        it('should fail given an empty version', async () => {
+            try {
+                const pocketAAT = await PocketAAT.from("", clientPublicKey, applicationPublicKey, applicationPrivateKey)
+            } catch (error) {
+                expect(error).to.be.an.instanceof(Error)
             }
-            expect(foo).to.throw(TypeError)
         })
 
-        it('should fail given an empty clientPublicKey', () => {
-            const foo = function () {
-                return PocketAAT.from(version, "", applicationPublicKey, applicationPrivateKey)
+        it('should fail given an empty clientPublicKey', async () => {
+            try {
+                const pocketAAT = await PocketAAT.from(version, "", applicationPublicKey, applicationPrivateKey)
+            } catch (error) {
+                expect(error).to.be.an.instanceof(Error)
             }
-            expect(foo).to.throw(TypeError)
         })
 
-        it('should fail given an empty applicationPublicKey', () => {
-            const foo = function () {
-                return PocketAAT.from(version, clientPublicKey, "", applicationPrivateKey)
+        it('should fail given an empty applicationPublicKey', async () => {
+            try {
+                const pocketAAT = await PocketAAT.from(version, clientPublicKey, "", applicationPrivateKey)
+            } catch (error) {
+                expect(error).to.be.an.instanceof(Error)
             }
-            expect(foo).to.throw(TypeError)
         })
 
-        it('should fail given an empty applicationPrivateKey', () => {
-            const foo = function () {
-                return PocketAAT.from(version, clientPublicKey, applicationPublicKey, "")
+        it('should fail given an empty applicationPrivateKey', async () => {
+            try {
+                const pocketAAT = await PocketAAT.from(version, clientPublicKey, applicationPublicKey, "")
+            } catch (error) {
+                expect(error).to.be.an.instanceof(Error)
             }
-            expect(foo).to.throw(TypeError)
         })
     })
 })

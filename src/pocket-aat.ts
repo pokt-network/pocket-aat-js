@@ -1,17 +1,18 @@
 import { sha3_256 } from 'js-sha3'
-import * as ed25519 from "@pokt-network/ed25519"
-import { Helper } from "./utils/helper"
+import { Helper } from './utils/helper'
 import { Versions } from './utils/enums'
 
+import * as Sodium from 'libsodium-wrappers'
+
 /**
- * @description PocketAAT implementation 
- * (version 0.0.1 of the specification: 
+ * @description PocketAAT implementation
+ * (version 0.0.1 of the specification:
  * https://github.com/pokt-network/pocket-core/blob/staging/doc/application-auth-token.md).
  */
 export class PocketAAT {
   /**
    *
-   * Creates a PocketAAT object, automatically creates the 
+   * Creates a PocketAAT object, automatically creates the
    * signature using the provided parameters
    * @param {string} version - Version information.
    * @param {string} clientPublicKey - Client Public Key.
@@ -24,22 +25,25 @@ export class PocketAAT {
     version: string,
     clientPublicKey: string,
     applicationPublicKey: string,
-    privateKey: string
-  ): PocketAAT {
-    if (Versions.isSupported(version)) {
-      const applicationSignature = this.sign(
-        {
-          version: version,
-          app_pub_key: applicationPublicKey,
-          client_pub_key: clientPublicKey,
-          signature: ""
-        },
-        privateKey,
-      )
-      return new PocketAAT(version, clientPublicKey, applicationPublicKey, applicationSignature)
-    } else {
-      throw new TypeError('Provided version is not supported.')
-    }
+    privateKey: string,
+  ): Promise<PocketAAT> {
+    return Sodium.ready.then(() => {
+      if (Versions.isSupported(version)) {
+        const applicationSignature = this.sign(
+          {
+            version: version,
+            app_pub_key: applicationPublicKey,
+            client_pub_key: clientPublicKey,
+            signature: '',
+          },
+          privateKey,
+        )
+        return new PocketAAT(version, clientPublicKey, applicationPublicKey, applicationSignature)
+      } else {
+        console.log("POCKET AAT ERROR")
+        throw new TypeError('Provided version is not supported.')
+      }
+    })
   }
 
   /**
@@ -47,23 +51,24 @@ export class PocketAAT {
    * @param aatPayload - Object with the mandatory parameters.
    * @param privateKey - Private Key
    */
-  private static sign(aatPayload: object, privateKey: string) {
+  private static sign(aatPayload: object, privateKey: string): string {
     // Generate sha3 hash of the aat payload object
     const hash = sha3_256.create()
     hash.update(JSON.stringify(aatPayload))
-    const bufferPayload = Buffer.from(hash.hex(), 'hex')
+    const bufferPayload = Helper.fromHex(hash.hex())
 
     if (Helper.byteLength(privateKey) === 64 && Helper.validateHexStr(privateKey)) {
       // Return signed aat payload hash
-      const privateKeyBuffer = Buffer.from(privateKey, 'hex')
-      const signature = ed25519.Sign(bufferPayload, privateKeyBuffer)
-      return signature.toString('hex')
+      const privateKeyBuffer = Helper.fromHex(privateKey)
+      const signature = Sodium.crypto_sign(bufferPayload, privateKeyBuffer, 'hex')
+
+      return signature.substring(0, 128)
     } else {
       throw new TypeError("Private key can't be an empty string")
     }
   }
 
-  public readonly version: string = Versions["0.0.1"].toString()
+  public readonly version: string = Versions['0.0.1'].toString()
   public readonly clientPublicKey: string
   public readonly applicationPublicKey: string
   public readonly applicationSignature: string
@@ -75,12 +80,7 @@ export class PocketAAT {
    * @param {string} applicationPublicKey - Application Public Key.
    * @param {string} applicationSignature - Application Signature.
    */
-  constructor(
-    version: string,
-    clientPublicKey: string,
-    applicationPublicKey: string,
-    applicationSignature: string
-  ) {
+  constructor(version: string, clientPublicKey: string, applicationPublicKey: string, applicationSignature: string) {
     this.version = version
     this.clientPublicKey = clientPublicKey
     this.applicationPublicKey = applicationPublicKey
@@ -90,7 +90,7 @@ export class PocketAAT {
       version: version,
       app_pub_key: applicationPublicKey,
       client_pub_key: clientPublicKey,
-      signature: ""
+      signature: '',
     }
     if (!this.isValid()) {
       throw new TypeError('Invalid properties format.')
@@ -106,8 +106,10 @@ export class PocketAAT {
   public isValid(): boolean {
     return (
       this.version.length !== 0 &&
-      Helper.byteLength(this.clientPublicKey) === 32 && Helper.validateHexStr(this.clientPublicKey) &&
-      Helper.byteLength(this.applicationPublicKey) === 32 && Helper.validateHexStr(this.applicationPublicKey) &&
+      Helper.byteLength(this.clientPublicKey) === 32 &&
+      Helper.validateHexStr(this.clientPublicKey) &&
+      Helper.byteLength(this.applicationPublicKey) === 32 &&
+      Helper.validateHexStr(this.applicationPublicKey) &&
       Helper.validateHexStr(this.applicationSignature)
     )
   }
@@ -120,10 +122,10 @@ export class PocketAAT {
     // Generate sha3 hash of the aat payload object
     const hash = sha3_256.create()
     hash.update(JSON.stringify(payload))
-    const bufferPayload = Buffer.from(hash.hex(), 'hex')
-    const bufferApplicationSignature = Buffer.from(applicationSignature, 'hex')
-    const bufferApplicationPublicKey = Buffer.from(applicationPublicKey, 'hex')
+    const bufferPayload = Helper.fromHex(hash.hex())
+    const bufferApplicationSignature = Helper.fromHex(applicationSignature)
+    const bufferApplicationPublicKey = Helper.fromHex(applicationPublicKey)
 
-    return ed25519.Verify(bufferPayload, bufferApplicationSignature, bufferApplicationPublicKey)
+    return Sodium.crypto_sign_verify_detached(bufferApplicationSignature, bufferPayload, bufferApplicationPublicKey)
   }
 }
