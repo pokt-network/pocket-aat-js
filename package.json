@@ -8,6 +8,7 @@
     "node": ">=10.19.0 <=12.15.0"
   },
   "scripts": {
+    "start:dev": "webpack-dev-server",
     "webpack": "webpack",
     "test": "mocha --require ts-node/register tests/**/*.ts",
     "build": "rm -r lib & npm run lint & tsc & npm run webpack -- --mode production",
@@ -34,18 +35,19 @@
     "@types/chai": "^4.2.7",
     "@types/mocha": "^5.2.7",
     "@types/node": "^13.9.6",
+    "acorn": "^6.0.5",
     "chai": "^4.2.0",
     "mocha": "^6.2.2",
     "prettier": "^1.19.1",
+    "ts-loader": "^6.2.1",
+    "ts-node": "^8.5.4",
     "tsconfig-paths": "^3.9.0",
     "tslint": "^5.20.1",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.7.4",
     "webpack": "^4.41.6",
     "webpack-cli": "^3.3.11",
-    "webpack-dev-server": "^3.10.3",
-    "ts-node": "^8.5.4",
-    "ts-loader": "^6.2.1"
+    "webpack-dev-server": "^3.10.3"
   },
   "dependencies": {
     "@types/libsodium-wrappers": "^0.7.7",
