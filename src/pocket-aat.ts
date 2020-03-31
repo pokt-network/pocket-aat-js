@@ -80,11 +80,11 @@ export class PocketAAT {
    * @param {string} applicationPublicKey - Application Public Key.
    * @param {string} applicationSignature - Application Signature.
    */
+
   constructor(version: string,
               clientPublicKey: string,
               applicationPublicKey: string,
               applicationSignature: string) {
-
     this.version = version
     this.clientPublicKey = clientPublicKey
     this.applicationPublicKey = applicationPublicKey
