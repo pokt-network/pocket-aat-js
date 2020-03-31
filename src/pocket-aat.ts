@@ -2,7 +2,7 @@ import { sha3_256 } from 'js-sha3'
 import { Helper } from './utils/helper'
 import { Versions } from './utils/enums'
 
-import * as Sodium from 'libsodium-wrappers'
+import Sodium from 'libsodium-wrappers'
 
 /**
  * @description PocketAAT implementation
