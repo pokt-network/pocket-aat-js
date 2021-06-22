@@ -45,16 +45,21 @@ npm install --save @pokt-network/aat-js
 const PocketAAT = require('@pokt-network/aat-js');
 
 // Define the arguments needed to build an AAT
-const clientPublicKey = '0x6F5Ec3BCdf9013a5553d53b7a42CBCce4e1B9901';
-const applicationPublicKey = '0x80Aa10e5d840db15dDFD3e0B46C63EE9a567780B';
-const applicationPrivateKey = 'E73BE2AD96721D350CCFAEBF30CB2A4160652940588987EF56A9DD0FAE8042CB';
+const clientPublicKey = 'b70382156da53d4274f655961e8b1aa0950aa7f4';
+const applicationPublicKey = 'a85f3577dcfe59bfed60b3ed013c739ac875237f98a98735dfa13733b0ced42d';
+const applicationPrivateKey = 'f70196f8f9246c957e4947c1be09da98c405aebc1a4e2...';
 
-// Create a new PocketAAT instance
-var pocketAAT = PocketAAT.from(clientPublicKey, applicationPublicKey, applicationPrivateKey);
-
-// Example JSON output
-console.log(JSON.stringify(pocketAAT));
-> "{\"version\":\"0.0.1\",\"clientPublicKey\":\"0x6F5Ec3BCdf9013a5553d53b7a42CBCce4e1B9901\",\"applicationPublicKey\":\"0x80Aa10e5d840db15dDFD3e0B46C63EE9a567780B\",\"applicationSignature\":\"29cb5d7f9f1424f2c47cb354a7375be18ae85f730bac435155cc060dd52d65eb0002dbad29deda2a8115b6bd447af1158e35d32eb423371bef879fa4bc90840b\"}"
+(async () => {
+  try {
+      // Create a new PocketAAT instance
+      var pocketAAT = await PocketAAT.from('0.0.1', clientPublicKey, applicationPublicKey, applicationPrivateKey);
+      
+      // Example JSON output
+      console.log(JSON.stringify(pocketAAT));
+  } catch (e) {
+      console.log(e);
+  }
+})();
 ```
 
 ## Running the tests
