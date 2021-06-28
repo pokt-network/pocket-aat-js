@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { sha3_256 } from 'js-sha3'
 import { Helper } from './utils/helper'
 import { Versions } from './utils/enums'
@@ -12,8 +13,8 @@ import Sodium from 'libsodium-wrappers'
 export class PocketAAT {
   /**
    *
-   * Creates a PocketAAT object, automatically creates the
-   * signature using the provided parameters
+   * @description Instantiate the PocketAAT class, automatically creates the signature using the provided parameters
+   * 
    * @param {string} version - Version information.
    * @param {string} clientPublicKey - Client Public Key.
    * @param {string} applicationPublicKey - Application Public Key.
@@ -48,8 +49,8 @@ export class PocketAAT {
 
   /**
    *
-   * Creates a PocketAAT object, automatically creates the
-   * signature using the provided parameters
+   * @description Instantiate the PocketAAT class using an already generated signature
+   * 
    * @param {string} version - Version information.
    * @param {string} clientPublicKey - Client Public Key.
    * @param {string} applicationPublicKey - Application Public Key.
@@ -95,6 +96,7 @@ export class PocketAAT {
 
   /**
    * @description Given an aatPayload object, create a SHA3 hash of it and signs it using privateKey.
+   * 
    * @param aatPayload - Object with the mandatory parameters.
    * @param privateKey - Private Key
    */
@@ -122,6 +124,7 @@ export class PocketAAT {
 
   /**
    * @description PocketAAT constructor
+   * 
    * @param {string} version - Version information.
    * @param {string} clientPublicKey - Client Public Key.
    * @param {string} applicationPublicKey - Application Public Key.
@@ -137,13 +140,7 @@ export class PocketAAT {
     this.clientPublicKey = clientPublicKey
     this.applicationPublicKey = applicationPublicKey
     this.applicationSignature = applicationSignature
-    // Payload to verify signature
-    const payload = {
-      version: version,
-      app_pub_key: applicationPublicKey,
-      client_pub_key: clientPublicKey,
-      signature: '',
-    }
+
     if (!this.isValid()) {
       throw new TypeError('Invalid properties format.')
     }
@@ -151,6 +148,7 @@ export class PocketAAT {
 
   /**
    * @description Returns whether or not this is a valid AAT according to the current version.
+   * 
    */
   public isValid(): boolean {
     return (

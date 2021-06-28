@@ -10,6 +10,7 @@ export namespace Versions {
   /**
    *
    * Checks if the provided version is supported
+   * 
    * @param {string} str - Provided version string.
    * @returns {boolean} - If is supported or not.
    * @memberof Versions
