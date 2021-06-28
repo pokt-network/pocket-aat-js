@@ -3,7 +3,7 @@
     "target": "es5",
     "module": "commonjs",
     "sourceMap": true,
-    "outDir": "./lib",
+    "outDir": "./dist",
     "strict": true,
     "alwaysStrict": true,
     "lib": ["es5", "es6", "dom"],
@@ -12,5 +12,11 @@
     "declaration": true,
     "esModuleInterop": true
   },
-  "exclude": ["node_modules", "**/__tests__/*"]
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts",
+    "dist",
+    "tests",
+    "build"
+  ]
 }

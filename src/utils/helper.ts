@@ -2,6 +2,7 @@ export class Helper {
   /**
    * referenced from https://stackoverflow.com/a/10121740
    * Checks the lenght of a provided string
+   * 
    * @param {string} str - Provided string.
    * @returns {number} - The string lenght in bytes.
    * @memberof Helper
@@ -18,6 +19,7 @@ export class Helper {
   /**
    * referenced from https://www.sitepoint.com/community/t/how-to-check-if-string-is-hexadecimal/162739/2
    * Checks if the provided string is a valid Hex.
+   * 
    * @param {string} str - Provided string.
    * @returns {boolean} - If is a valid Hex string or not.
    * @memberof Helper
