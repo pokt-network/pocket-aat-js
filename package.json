@@ -35,6 +35,7 @@
     "@typescript-eslint/parser": "^4.27.0",
     "acorn": "^8.4.1",
     "chai": "^4.3.4",
+    "create-ts-index": "^1.13.6",
     "eslint": "^7.28.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.23.4",
