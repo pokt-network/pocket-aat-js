@@ -5,6 +5,12 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# typedoc output
+doc/main/
+
+# Browserify output
+dist
+
 # Runtime data
 pids
 *.pid
