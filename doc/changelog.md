@@ -1,4 +1,4 @@
-## 0.1.2-RC
+## 0.1.3-RC
 - Replaced TsLint with EsLint.
 - Replaced Webpack with Browserify.
 - Added TypeDoc to automatically generate documentation on install.
