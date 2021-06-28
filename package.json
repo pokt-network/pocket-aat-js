@@ -2,8 +2,8 @@
   "name": "@pokt-network/aat-js",
   "version": "0.1.2-rc",
   "description": "Application Authentication Token Javascript SDK",
-  "main": "lib/src/index.js",
-  "types": "lib/src/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "generateDocs": "typedoc",
     "browserify": "browserify browserify.js -p [ minifyify --no-map ] --standalone Pocket > dist/web.js",
@@ -25,7 +25,7 @@
   },
   "homepage": "https://github.com/pokt-network/pocket-aat-js#readme",
   "files": [
-    "lib/**/*"
+    "dist/**/*"
   ],
   "devDependencies": {
     "@types/chai": "^4.2.7",

@@ -33,7 +33,7 @@ describe('PocketAAT Class tests', () => {
     describe('Invalid Hex AAT parameters', () => {
         it('should fail given an invalid hex clientPublicKey', async () => {
             try {
-                const pocketAAT = await PocketAAT.from(version, invalidHexClientPublicKey, applicationPublicKey, applicationPrivateKey)
+                await PocketAAT.from(version, invalidHexClientPublicKey, applicationPublicKey, applicationPrivateKey)
             } catch (error) {
                 expect(error).to.be.an.instanceof(TypeError)
             }
@@ -41,7 +41,7 @@ describe('PocketAAT Class tests', () => {
 
         it('should fail given an invalid hex applicationPublicKey', async () => {
             try {
-                const pocketAAT = await PocketAAT.from(version, clientPublicKey, invalidHexApplicationPublicKey, applicationPrivateKey)
+                await PocketAAT.from(version, clientPublicKey, invalidHexApplicationPublicKey, applicationPrivateKey)
             } catch (error) {
                 expect(error).to.be.an.instanceof(TypeError)
             }
@@ -50,15 +50,15 @@ describe('PocketAAT Class tests', () => {
 
         it('should fail given an invalid hex applicationPrivateKey', async () => {
             try {
-                const pocketAAT = await PocketAAT.from(version, clientPublicKey, applicationPublicKey, invalidHexApplicationPrivateKey)
+                await PocketAAT.from(version, clientPublicKey, applicationPublicKey, invalidHexApplicationPrivateKey)
             } catch (error) {
                 expect(error).to.be.an.instanceof(TypeError)
             }
         })
 
-        it('Should fail given an invalid hex Application Signature', async () => {
+        it('Should fail given an invalid hex Application Signature', () => {
             try {
-                const pocketAAT = await new PocketAAT(version, clientPublicKey, applicationPublicKey, invalidHexApplicationSignature)
+                new PocketAAT(version, clientPublicKey, applicationPublicKey, invalidHexApplicationSignature)
             } catch (error) {
                 expect(error).to.be.an.instanceof(Error)
             }
@@ -67,14 +67,14 @@ describe('PocketAAT Class tests', () => {
     describe('Unsupported or invalid AAT Scenarios', () => {
         it('should fail given an unsupported version', async () => {
             try {
-                const pocketAAT = await PocketAAT.from("1.0.2", clientPublicKey, applicationPublicKey, applicationPrivateKey)
+                await PocketAAT.from("1.0.2", clientPublicKey, applicationPublicKey, applicationPrivateKey)
             } catch (error) {
                 expect(error).to.be.an.instanceof(Error)
             }
         })
-        it('should fail given an Application Signature that isnt related to the Application Public Key', async () => {
+        it('should fail given an Application Signature that isnt related to the Application Public Key', () => {
             try {
-                const pocketAAT = await new PocketAAT(version, clientPublicKey, applicationPublicKey, invalidApplicationSignature)
+                new PocketAAT(version, clientPublicKey, applicationPublicKey, invalidApplicationSignature)
             } catch (error) {
                 expect(error).to.be.an.instanceof(Error)
             }
@@ -83,7 +83,7 @@ describe('PocketAAT Class tests', () => {
     describe('Wrong AAT parameters', () => {
         it('should fail given an empty version', async () => {
             try {
-                const pocketAAT = await PocketAAT.from("", clientPublicKey, applicationPublicKey, applicationPrivateKey)
+                await PocketAAT.from("", clientPublicKey, applicationPublicKey, applicationPrivateKey)
             } catch (error) {
                 expect(error).to.be.an.instanceof(Error)
             }
@@ -91,7 +91,7 @@ describe('PocketAAT Class tests', () => {
 
         it('should fail given an empty clientPublicKey', async () => {
             try {
-                const pocketAAT = await PocketAAT.from(version, "", applicationPublicKey, applicationPrivateKey)
+                await PocketAAT.from(version, "", applicationPublicKey, applicationPrivateKey)
             } catch (error) {
                 expect(error).to.be.an.instanceof(Error)
             }
@@ -99,7 +99,7 @@ describe('PocketAAT Class tests', () => {
 
         it('should fail given an empty applicationPublicKey', async () => {
             try {
-                const pocketAAT = await PocketAAT.from(version, clientPublicKey, "", applicationPrivateKey)
+                await PocketAAT.from(version, clientPublicKey, "", applicationPrivateKey)
             } catch (error) {
                 expect(error).to.be.an.instanceof(Error)
             }
@@ -107,7 +107,7 @@ describe('PocketAAT Class tests', () => {
 
         it('should fail given an empty applicationPrivateKey', async () => {
             try {
-                const pocketAAT = await PocketAAT.from(version, clientPublicKey, applicationPublicKey, "")
+                await PocketAAT.from(version, clientPublicKey, applicationPublicKey, "")
             } catch (error) {
                 expect(error).to.be.an.instanceof(Error)
             }
